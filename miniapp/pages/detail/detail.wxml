@@ -1,0 +1,73 @@
+<view class="container" wx:if="{{session}}">
+  <!-- Course info card -->
+  <view class="card">
+    <view class="detail-header">
+      <text class="detail-name">{{session.template_name}}</text>
+      <view class="tag tag-{{session.difficulty}}">{{session.difficulty}}</view>
+    </view>
+
+    <view class="detail-row">
+      <text class="detail-label">上课时间</text>
+      <text>{{_dateTime}}</text>
+    </view>
+    <view class="detail-row">
+      <text class="detail-label">课程时长</text>
+      <text>{{session.duration_minutes}} 分钟</text>
+    </view>
+    <view class="detail-row" wx:if="{{session.coach_name}}">
+      <text class="detail-label">教练</text>
+      <text>{{session.coach_name}}</text>
+    </view>
+    <view class="detail-row">
+      <text class="detail-label">剩余名额</text>
+      <text class="{{session.confirmed_count >= session.capacity ? 'text-danger' : 'text-success'}}">
+        {{session.capacity - session.confirmed_count}} / {{session.capacity}}
+      </text>
+    </view>
+
+    <view wx:if="{{session.template_description}}" class="detail-desc">
+      <text class="detail-label">课程介绍</text>
+      <text class="text-muted">{{session.template_description}}</text>
+    </view>
+  </view>
+
+  <!-- Booking status -->
+  <view class="card" wx:if="{{booking}}">
+    <view class="booking-status">
+      <text class="detail-label">当前预约状态</text>
+      <view class="tag tag-{{booking.status.toLowerCase()}}">{{statusText[booking.status]}}</view>
+    </view>
+
+    <!-- HOLD: show confirm + cancel buttons -->
+    <view wx:if="{{booking.status === 'HOLD'}}" class="btn-group">
+      <button class="btn-primary" bindtap="confirmBooking" loading="{{confirming}}">确认预约</button>
+      <view style="height: 16rpx"></view>
+      <button class="btn-cancel" bindtap="cancelBooking" loading="{{cancelling}}">取消占位</button>
+    </view>
+
+    <!-- CONFIRMED: show cancel button -->
+    <view wx:if="{{booking.status === 'CONFIRMED'}}" class="btn-group">
+      <text class="text-success" style="text-align: center; display: block; margin-bottom: 20rpx; font-size: 30rpx;">
+        预约成功，准时上课哦！
+      </text>
+      <button class="btn-cancel" bindtap="cancelBooking" loading="{{cancelling}}">取消预约</button>
+    </view>
+  </view>
+
+  <!-- No booking yet: show hold button -->
+  <view wx:if="{{!booking && session.status === 'SCHEDULED'}}" style="margin-top: 20rpx;">
+    <button
+      class="btn-primary"
+      bindtap="holdBooking"
+      loading="{{holding}}"
+      disabled="{{session.confirmed_count >= session.capacity}}"
+    >
+      {{session.confirmed_count >= session.capacity ? '已满员' : '立即预约'}}
+    </button>
+  </view>
+</view>
+
+<!-- Loading -->
+<view wx:if="{{!session}}" style="text-align: center; padding: 100rpx 0;">
+  <text class="text-muted">加载中...</text>
+</view>

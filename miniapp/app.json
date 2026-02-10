@@ -1,0 +1,29 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/detail/detail",
+    "pages/bookings/bookings"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#7c5cfc",
+    "navigationBarTitleText": "瑜伽预约",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f7fa"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#7c5cfc",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "课程表"
+      },
+      {
+        "pagePath": "pages/bookings/bookings",
+        "text": "我的预约"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

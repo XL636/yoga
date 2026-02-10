@@ -1,0 +1,22 @@
+{
+  "name": "yoga-booking-backend",
+  "version": "0.1.0",
+  "description": "Yoga class booking system - backend API",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/app.js",
+    "test": "node --test tests/stateMachine.test.js tests/concurrency.test.js tests/integration.test.js",
+    "test:unit": "node --test tests/stateMachine.test.js tests/concurrency.test.js",
+    "test:integration": "node --test tests/integration.test.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^10.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

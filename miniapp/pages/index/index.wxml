@@ -1,0 +1,51 @@
+<view class="container">
+  <!-- Date selector -->
+  <scroll-view scroll-x class="date-bar">
+    <view
+      wx:for="{{dates}}"
+      wx:key="date"
+      class="date-item {{selectedDate === item.date ? 'date-active' : ''}}"
+      bindtap="selectDate"
+      data-date="{{item.date}}"
+    >
+      <text class="date-label">{{item.label}}</text>
+      <text class="date-weekday">{{item.weekday}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- Loading -->
+  <view wx:if="{{loading}}" style="text-align: center; padding: 60rpx 0;">
+    <text class="text-muted">加载中...</text>
+  </view>
+
+  <!-- Empty -->
+  <view wx:elif="{{sessions.length === 0}}" style="text-align: center; padding: 100rpx 0;">
+    <text class="text-muted">当日暂无课程</text>
+  </view>
+
+  <!-- Session list -->
+  <view wx:else>
+    <view
+      class="card session-card"
+      wx:for="{{sessions}}"
+      wx:key="id"
+      bindtap="goDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="session-header">
+        <text class="session-name">{{item.template_name}}</text>
+        <view class="tag tag-{{item.difficulty}}">{{item.difficulty}}</view>
+      </view>
+      <view class="session-info">
+        <text class="session-time">{{item._startTime}} - {{item._endTime}}</text>
+        <text wx:if="{{item.coach_name}}" class="text-muted"> | {{item.coach_name}}</text>
+      </view>
+      <view class="session-footer">
+        <text class="session-spots {{item.confirmed_count >= item.capacity ? 'text-danger' : 'text-success'}}">
+          {{item.confirmed_count >= item.capacity ? '已满' : '剩余 ' + (item.capacity - item.confirmed_count) + ' 个名额'}}
+        </text>
+        <text class="text-muted">{{item.duration_minutes}}分钟</text>
+      </view>
+    </view>
+  </view>
+</view>

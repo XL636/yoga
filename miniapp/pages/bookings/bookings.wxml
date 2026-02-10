@@ -1,0 +1,60 @@
+<view class="container">
+  <!-- Tabs -->
+  <view class="tabs">
+    <view
+      class="tab {{activeTab === 'active' ? 'tab-active' : ''}}"
+      bindtap="switchTab"
+      data-tab="active"
+    >待上课</view>
+    <view
+      class="tab {{activeTab === 'past' ? 'tab-active' : ''}}"
+      bindtap="switchTab"
+      data-tab="past"
+    >历史记录</view>
+  </view>
+
+  <!-- Loading -->
+  <view wx:if="{{loading}}" style="text-align: center; padding: 60rpx 0;">
+    <text class="text-muted">加载中...</text>
+  </view>
+
+  <!-- Empty -->
+  <view wx:elif="{{filteredBookings.length === 0}}" style="text-align: center; padding: 100rpx 0;">
+    <text class="text-muted">{{activeTab === 'active' ? '暂无预约' : '暂无历史记录'}}</text>
+  </view>
+
+  <!-- Booking list -->
+  <view wx:else>
+    <view class="card booking-card" wx:for="{{filteredBookings}}" wx:key="id">
+      <view class="booking-header">
+        <text class="booking-name">{{item.template_name}}</text>
+        <view class="tag tag-{{item.status.toLowerCase()}}">{{statusText[item.status]}}</view>
+      </view>
+
+      <view class="booking-info">
+        <text>{{item._dateTime}}</text>
+        <text wx:if="{{item.coach_name}}" class="text-muted"> | {{item.coach_name}}</text>
+      </view>
+
+      <view wx:if="{{item.cancel_reason}}" class="text-muted" style="margin-top: 8rpx;">
+        取消原因：{{cancelReasonText[item.cancel_reason] || item.cancel_reason}}
+      </view>
+
+      <!-- Cancel button for active bookings -->
+      <view wx:if="{{item.status === 'HOLD' || item.status === 'CONFIRMED'}}" class="booking-actions">
+        <button
+          wx:if="{{item.status === 'HOLD'}}"
+          class="btn-small btn-confirm"
+          bindtap="confirmBooking"
+          data-id="{{item.id}}"
+        >确认</button>
+        <button
+          class="btn-small btn-cancel-small"
+          bindtap="cancelBooking"
+          data-id="{{item.id}}"
+          data-status="{{item.status}}"
+        >取消</button>
+      </view>
+    </view>
+  </view>
+</view>
